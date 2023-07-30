@@ -1,6 +1,7 @@
 // Helper widget, to dispatch Notifications when a right-click is detected on some child
 import 'package:flutter/widgets.dart';
-
+import 'package:flutter/gestures.dart';
+import 'package:universal_html/html.dart' as html;
 import '../context_menus.dart';
 
 /// Wraps any widget in a GestureDetector and calls [ContextMenuOverlay].show
@@ -20,10 +21,14 @@ class ContextMenuRegion extends StatelessWidget {
     }
 
     if (isEnabled == false) return child;
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onSecondaryTap: showMenu,
-      onLongPress: enableLongPress ? showMenu : null,
+    return Listener(
+      onPointerDown:(event){
+    if (event.kind == PointerDeviceKind.mouse &&
+    event.buttons == kSecondaryMouseButton) {
+      showMenu();
+    }
+
+    },
       child: child,
     );
   }
